@@ -11,16 +11,20 @@ from flask_jwt_extended import JWTManager, create_access_token
 # ---------------------------------------------------------------------------
 application = Flask(__name__)
 
-# Configuración de la base de datos PostgreSQL (variables de entorno de RDS)
-db_user = os.environ.get('RDS_USERNAME', 'postgres')
-db_pass = os.environ.get('RDS_PASSWORD', 'postgres')
-db_host = os.environ.get('RDS_HOSTNAME', 'localhost')
-db_port = os.environ.get('RDS_PORT', '5432')
-db_name = os.environ.get('RDS_DB_NAME', 'blacklist_db')
+# PRIORIDAD 1: Buscar variable de entorno DATABASE_URL (usada por los tests)
+# PRIORIDAD 2: Buscar variables de RDS (producción)
+# PRIORIDAD 3: Usar localhost (desarrollo local)
+db_uri = os.environ.get('DATABASE_URL') or os.environ.get('SQLALCHEMY_DATABASE_URI')
 
-application.config['SQLALCHEMY_DATABASE_URI'] = (
-    f"postgresql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}"
-)
+if not db_uri:
+    db_user = os.environ.get('RDS_USERNAME', 'postgres')
+    db_pass = os.environ.get('RDS_PASSWORD', 'postgres')
+    db_host = os.environ.get('RDS_HOSTNAME', 'localhost')
+    db_port = os.environ.get('RDS_PORT', '5432')
+    db_name = os.environ.get('RDS_DB_NAME', 'blacklist_db')
+    db_uri = f"postgresql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}"
+
+application.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Clave secreta para JWT – se puede configurar vía variable de entorno
