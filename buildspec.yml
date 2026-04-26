@@ -73,7 +73,7 @@ phases:
       - echo "==> [post_build] Subiendo imagen a Amazon ECR..."
       - "docker push ${ECR_REPO_URI}:${IMAGE_TAG}"
       - echo "==> [post_build] Imagen publicada exitosamente en ECR."
-      - echo "==> [post_build] URI del artefacto: $ECR_REPO_URI:$IMAGE_TAG"
+      - echo "==> [post_build] URI del artefacto"
       - echo "==> [post_build] Build de integracion continua completado."
 
 # -----------------------------------------------------------------------------
