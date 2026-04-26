@@ -61,7 +61,7 @@ phases:
       - echo "==> [build] Construyendo imagen Docker..."
       - docker build -t blacklist-api .
       - echo "==> [build] Imagen construida. Etiquetando para ECR..."
-      - docker tag blacklist-api:latest $ECR_REPO_URI:$IMAGE_TAG
+      - "docker tag blacklist-api:latest $ECR_REPO_URI:$IMAGE_TAG"
       - echo "==> [build] Imagen etiquetada como $ECR_REPO_URI:$IMAGE_TAG"
 
   # ---------------------------------------------------------------------------
@@ -71,7 +71,7 @@ phases:
   post_build:
     commands:
       - echo "==> [post_build] Subiendo imagen a Amazon ECR..."
-      - docker push $ECR_REPO_URI:$IMAGE_TAG
+      - "docker push $ECR_REPO_URI:$IMAGE_TAG"
       - echo "==> [post_build] Imagen publicada exitosamente en ECR."
       - echo "==> [post_build] URI del artefacto: $ECR_REPO_URI:$IMAGE_TAG"
       - echo "==> [post_build] Build de integracion continua completado."
