@@ -28,6 +28,29 @@ Ejecución desde dentro de src/:
 """
 
 import pytest
+import os
+
+# Creando una variable de entorno falsa ANTES de importar la app
+# Esto evita que SQLAlchemy intente conectar a localhost:5432 al cargar el archivo
+os.environ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+
+from src.application import application as app, db
+
+@pytest.fixture(autouse=True)
+def setup_database():
+    """Configura la base de datos antes de cada test."""
+    app.config['TESTING'] = True
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+    
+    with app.app_context():
+        db.create_all()
+        yield
+        db.session.remove()
+        db.drop_all()
+
+@pytest.fixture
+def client():
+    return app.test_client()
 
 # ---------------------------------------------------------------------------
 # Import compatible con ejecución desde la raíz (CodeBuild) y desde src/
