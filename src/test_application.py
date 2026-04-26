@@ -30,20 +30,20 @@ Ejecución desde dentro de src/:
 import pytest
 import os
 
-# Creando una variable de entorno falsa ANTES de importar la app
-# Esto evita que SQLAlchemy intente conectar a localhost:5432 al cargar el archivo
+# FORZANDO SQLITE ANTES DE CUALQUIER IMPORTACIÓN DE LA APP
+os.environ['DATABASE_URL'] = 'sqlite:///:memory:'
 os.environ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
 
+# Ahora sí importamos la app y la db
 from src.application import application as app, db
 
 @pytest.fixture(autouse=True)
 def setup_database():
-    """Configura la base de datos antes de cada test."""
     app.config['TESTING'] = True
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
     
     with app.app_context():
-        db.create_all()
+        db.create_all() # Crea las tablas en memoria
         yield
         db.session.remove()
         db.drop_all()
