@@ -46,7 +46,7 @@ phases:
   pre_build:
     commands:
       - echo "==> [pre_build] Ejecutando pruebas unitarias con Pytest..."
-      - pytest src/test_application.py -v
+      - PYTHONPATH=. pytest src/test_application.py -v
       - echo "==> [pre_build] Todas las pruebas pasaron exitosamente."
       - echo "==> [pre_build] Autenticando Docker con Amazon ECR..."
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REPO_URI
