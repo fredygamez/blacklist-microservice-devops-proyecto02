@@ -9,7 +9,7 @@ from flask_jwt_extended import JWTManager, create_access_token
 # ---------------------------------------------------------------------------
 # Configuración de la aplicación
 # ---------------------------------------------------------------------------
-# Nota para pruebas e iniciar CodeBuild 26apr2026
+# Esta Nota es para pruebas e iniciar CodeBuild 26apr2026. 
 application = Flask(__name__)
 
 # PRIORIDAD 1: Buscar variable de entorno DATABASE_URL (usada por los tests)
