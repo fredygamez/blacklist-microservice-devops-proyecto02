@@ -129,7 +129,7 @@ class TestHealthCheck:
         """
         response = client.get('/')
 
-        assert response.status_code == 200 # 999 # 200 <- pruebas intencionales de errores para activar pipeline
+        assert response.status_code == 999 # 200  <- pruebas intencionales de errores para activar pipeline
 
         data = response.get_json()
         assert data is not None
